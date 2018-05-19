@@ -2,50 +2,97 @@ package com.arctouch.codechallenge.home;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 
 import com.arctouch.codechallenge.R;
-import com.arctouch.codechallenge.api.TmdbApi;
-import com.arctouch.codechallenge.base.BaseActivity;
 import com.arctouch.codechallenge.data.Cache;
 import com.arctouch.codechallenge.model.Genre;
 import com.arctouch.codechallenge.model.Movie;
+import com.arctouch.codechallenge.presentation.MoviesListContract;
+import com.arctouch.codechallenge.presentation.MoviesListPresenter;
+import com.arctouch.codechallenge.util.NetworkUtils;
+import com.arctouch.codechallenge.util.SnackUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class HomeActivity extends BaseActivity {
+public class HomeActivity extends AppCompatActivity implements MoviesListContract.View {
 
-    private RecyclerView recyclerView;
-    private ProgressBar progressBar;
+    @BindView(R.id.coordinator_main)
+    CoordinatorLayout coordinatorLayout;
+
+    @BindView(R.id.swipe_refresh)
+    SwipeRefreshLayout swipeRefresh;
+
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerMovies;
+
+    private MoviesListPresenter moviesListPresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_activity);
 
-        this.recyclerView = findViewById(R.id.recyclerView);
-        this.progressBar = findViewById(R.id.progressBar);
+        ButterKnife.bind(this);
 
-        api.upcomingMovies(TmdbApi.API_KEY, TmdbApi.DEFAULT_LANGUAGE, 1L, TmdbApi.DEFAULT_REGION)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> {
-                    for (Movie movie : response.results) {
-                        movie.genres = new ArrayList<>();
-                        for (Genre genre : Cache.getGenres()) {
-                            if (movie.genreIds.contains(genre.id)) {
-                                movie.genres.add(genre);
-                            }
-                        }
-                    }
+        moviesListPresenter = new MoviesListPresenter(this, this, Schedulers.io(), AndroidSchedulers.mainThread());
 
-                    recyclerView.setAdapter(new HomeAdapter(response.results));
-                    progressBar.setVisibility(View.GONE);
-                });
+        moviesListPresenter.getGenres(false);
+
+        swipeRefresh.setOnRefreshListener(() -> {
+            if(NetworkUtils.isNetworkAvailable(this)) {
+                moviesListPresenter.getMovies(true);
+            }
+            else{
+                SnackUtils.showSnackbarWithAction(this, coordinatorLayout, "OK", "No network conection, try again later");
+            }
+        });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        moviesListPresenter.stop();
+    }
+
+    @Override
+    public void showProgress() {
+        swipeRefresh.setRefreshing(true);
+    }
+
+    @Override
+    public void hideProgress() {
+        swipeRefresh.setRefreshing(false);
+    }
+
+    @Override
+    public void onError(String msg) {
+        Snackbar.make(coordinatorLayout, msg, Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onSuccessGenres(List<Genre> genres) {
+        Cache.setGenres(genres);
+
+        moviesListPresenter.getMovies(false);
+    }
+
+    @Override
+    public void onSuccessMovies(List<Movie> movies) {
+        moviesListPresenter.addGenresToMovies(movies);
+
+        recyclerMovies.setAdapter(new HomeAdapter(movies));
     }
 }
