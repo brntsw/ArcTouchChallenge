@@ -44,7 +44,7 @@ public interface TmdbApi {
     );
 
     @GET("movie/{id}")
-    Observable<Movie> movie(
+    Observable<Response<Movie>> movie(
             @Path("id") Long id,
             @Query("api_key") String apiKey,
             @Query("language") String language

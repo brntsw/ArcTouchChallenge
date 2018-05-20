@@ -5,6 +5,8 @@ import com.squareup.moshi.Json;
 import java.util.List;
 
 public class Movie {
+    public static final String BUNDLE_ID = "movie_id";
+
     public int id;
     public String title;
     public String overview;
@@ -15,6 +17,8 @@ public class Movie {
     public String posterPath;
     @Json(name = "backdrop_path")
     public String backdropPath;
+    @Json(name = "adult")
+    public boolean adult;
     @Json(name = "release_date")
     public String releaseDate;
 

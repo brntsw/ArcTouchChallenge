@@ -1,4 +1,4 @@
-package com.arctouch.codechallenge.presentation;
+package com.arctouch.codechallenge;
 
 public interface BaseView {
 

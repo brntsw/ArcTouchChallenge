@@ -1,4 +1,4 @@
-package com.arctouch.codechallenge.presentation;
+package com.arctouch.codechallenge;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;

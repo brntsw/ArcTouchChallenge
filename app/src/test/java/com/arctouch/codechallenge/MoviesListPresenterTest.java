@@ -3,7 +3,7 @@ package com.arctouch.codechallenge;
 import android.content.Context;
 
 import com.arctouch.codechallenge.di.InjectionMoviesListPresenter;
-import com.arctouch.codechallenge.presentation.MoviesListContract;
+import com.arctouch.codechallenge.movies_list.presentation.MoviesListContract;
 
 import org.junit.Before;
 import org.junit.Test;

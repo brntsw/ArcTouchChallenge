@@ -1,8 +1,9 @@
-package com.arctouch.codechallenge.presentation;
+package com.arctouch.codechallenge.movies_list.presentation;
 
 import android.content.Context;
 import android.util.Log;
 
+import com.arctouch.codechallenge.BasePresenter;
 import com.arctouch.codechallenge.R;
 import com.arctouch.codechallenge.api.TmdbApi;
 import com.arctouch.codechallenge.data.Cache;
@@ -20,9 +21,7 @@ import java.util.Objects;
 
 import io.reactivex.Observer;
 import io.reactivex.Scheduler;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
 
 public class MoviesListPresenter extends BasePresenter<MoviesListContract.View> implements MoviesListContract.Presenter {

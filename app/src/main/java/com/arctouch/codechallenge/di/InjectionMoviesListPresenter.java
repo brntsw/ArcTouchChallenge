@@ -2,8 +2,8 @@ package com.arctouch.codechallenge.di;
 
 import android.content.Context;
 
-import com.arctouch.codechallenge.presentation.MoviesListContract;
-import com.arctouch.codechallenge.presentation.MoviesListPresenter;
+import com.arctouch.codechallenge.movies_list.presentation.MoviesListContract;
+import com.arctouch.codechallenge.movies_list.presentation.MoviesListPresenter;
 
 import io.reactivex.Scheduler;
 
