@@ -45,6 +45,8 @@ public class MovieDetailsPresenter extends BasePresenter<MovieDetailsContract.Vi
 
                     @Override
                     public void onNext(Response<Movie> movieResponse) {
+                        view.hideProgress();
+
                         if(movieResponse.isSuccessful()){
                             if(movieResponse.body() != null)
                                 view.onSuccessMovieDetails(movieResponse.body());

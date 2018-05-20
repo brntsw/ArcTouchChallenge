@@ -3,4 +3,5 @@
     <color name="colorPrimary">#424242</color>
     <color name="colorPrimaryDark">#1B1B1B</color>
     <color name="colorAccent">@android:color/white</color>
+    <color name="white_background_progress">#AAFFFFFF</color>
 </resources>

@@ -2,6 +2,6 @@
 <resources>
     <dimen name="snackbar_textsize">16sp</dimen>
     <dimen name="movie_title">16sp</dimen>
-    <dimen name="vote_size">22sp</dimen>
+    <dimen name="vote_size">26sp</dimen>
     <dimen name="details_text_size">14sp</dimen>
 </resources>

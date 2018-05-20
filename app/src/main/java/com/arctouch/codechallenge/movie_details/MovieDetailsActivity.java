@@ -1,11 +1,13 @@
 package com.arctouch.codechallenge.movie_details;
 
+import android.app.ProgressDialog;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,11 +15,15 @@ import android.widget.TextView;
 
 import com.arctouch.codechallenge.R;
 import com.arctouch.codechallenge.di.InjectionMovieDetailsPresenter;
+import com.arctouch.codechallenge.extensions.DateExtensionsKt;
 import com.arctouch.codechallenge.extensions.GlideExtensionsKt;
 import com.arctouch.codechallenge.model.Genre;
 import com.arctouch.codechallenge.model.Movie;
 import com.arctouch.codechallenge.movie_details.presentation.MovieDetailsContract;
 import com.arctouch.codechallenge.util.MovieImageUrlBuilder;
+import com.arctouch.codechallenge.util.ProgressDialogUtils;
+
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,12 +47,22 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieDeta
     @BindView(R.id.img_adult)
     ImageView imgAdult;
 
+    @BindView(R.id.tv_vote_average)
+    TextView tvVoteAverage;
+
     @BindView(R.id.tv_genres)
     TextView tvGenres;
 
     @BindView(R.id.tv_movie_title)
     TextView tvMovieTitle;
 
+    @BindView(R.id.tv_release_date)
+    TextView tvReleaseDate;
+
+    @BindView(R.id.tv_overview)
+    TextView tvOverview;
+
+    private ProgressDialog progress;
     private MovieDetailsContract.Presenter movieDetailsPresenter;
     private Bundle args;
     private int movieId;
@@ -83,35 +99,33 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieDeta
     @Override
     public void onSuccessMovieDetails(Movie movie) {
         if(movie != null) {
-            Log.d("Movie", movie.title);
+            GlideExtensionsKt.loadUrl(imgContext, movieImageUrlBuilder.buildBackdropUrl(movie.backdropPath));
+            GlideExtensionsKt.loadUrl(imgPoster, movieImageUrlBuilder.buildPosterUrl(movie.posterPath), true);
+
+            tvMovieTitle.setText(movie.title);
 
             if(movie.adult){
                 imgAdult.setVisibility(View.VISIBLE);
             }
 
-            StringBuilder genres = new StringBuilder();
-            for(Genre genre : movie.genres){
-                genres.append(genre.name).append(", ");
-            }
-
-            String genresResult = genres.toString().trim().substring(0, genres.toString().length() - 2);
-            tvGenres.setText(getString(R.string.genres_placeholder, genresResult));
-
-            GlideExtensionsKt.loadUrl(imgContext, movieImageUrlBuilder.buildBackdropUrl(movie.backdropPath));
-            GlideExtensionsKt.loadUrl(imgPoster, movieImageUrlBuilder.buildPosterUrl(movie.posterPath));
-
-            tvMovieTitle.setText(movie.title);
+            tvVoteAverage.setText(String.valueOf(movie.voteAverage));
+            tvGenres.setText(TextUtils.join(", ", movie.genres));
+            tvReleaseDate.setText(getString(R.string.release_date, DateExtensionsKt.convertToFormattedDate(movie.releaseDate)));
+            tvOverview.setText(movie.overview);
         }
     }
 
     @Override
     public void showProgress() {
-
+        hideProgress();
+        progress = ProgressDialogUtils.showLoadingDialog(this, "");
     }
 
     @Override
     public void hideProgress() {
-
+        if (progress != null && progress.isShowing()) {
+            progress.cancel();
+        }
     }
 
     @Override

@@ -48,7 +48,7 @@
             android:layout_marginStart="8dp"
             android:layout_toEndOf="@id/posterImageView"
             android:ellipsize="end"
-            android:maxLines="2"
+            android:maxLines="1"
             android:textSize="14sp"
             tools:text="Drama, Romance, Thriller" />
 

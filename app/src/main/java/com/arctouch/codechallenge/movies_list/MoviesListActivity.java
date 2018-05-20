@@ -23,7 +23,11 @@ import com.arctouch.codechallenge.movies_list.presentation.MoviesListPresenter;
 import com.arctouch.codechallenge.util.NetworkUtils;
 import com.arctouch.codechallenge.util.SnackUtils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

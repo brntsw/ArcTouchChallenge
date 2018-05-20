@@ -21,6 +21,8 @@ public class Movie {
     public boolean adult;
     @Json(name = "release_date")
     public String releaseDate;
+    @Json(name = "vote_average")
+    public double voteAverage;
 
     @Override
     public boolean equals(Object o) {

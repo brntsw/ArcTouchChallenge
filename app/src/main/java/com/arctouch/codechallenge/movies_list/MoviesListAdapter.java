@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.arctouch.codechallenge.R;
+import com.arctouch.codechallenge.extensions.DateExtensionsKt;
 import com.arctouch.codechallenge.extensions.GlideExtensionsKt;
 import com.arctouch.codechallenge.listener.IMovieClickListener;
 import com.arctouch.codechallenge.model.Movie;
@@ -61,11 +62,11 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Vi
         void bind(Movie movie) {
             titleTextView.setText(movie.title);
             genresTextView.setText(TextUtils.join(", ", movie.genres));
-            releaseDateTextView.setText(movie.releaseDate);
+            releaseDateTextView.setText(DateExtensionsKt.convertToFormattedDate(movie.releaseDate));
 
             String posterPath = movie.posterPath;
             if (!TextUtils.isEmpty(posterPath)) {
-                GlideExtensionsKt.loadUrl(posterImageView, movieImageUrlBuilder.buildPosterUrl(posterPath));
+                GlideExtensionsKt.loadUrl(posterImageView, movieImageUrlBuilder.buildPosterUrl(posterPath), true);
             }
         }
     }
