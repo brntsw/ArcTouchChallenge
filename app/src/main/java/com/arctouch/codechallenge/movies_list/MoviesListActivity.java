@@ -68,6 +68,7 @@ public class MoviesListActivity extends AppCompatActivity implements MoviesListC
     private String searchedName;
     private int currentPage;
     private Menu menu;
+    private Bundle args;
 
     private static final String BUNDLE_SEARCHED_NAME = "search_by_name";
     private static final String BUNDLE_CURRENT_PAGE = "current_page";
@@ -84,6 +85,8 @@ public class MoviesListActivity extends AppCompatActivity implements MoviesListC
         if (ab != null) {
             ab.setTitle(R.string.app_name);
         }
+
+        args = getIntent().getExtras();
 
         searchedName = "";
         currentPage = 1;
@@ -107,19 +110,26 @@ public class MoviesListActivity extends AppCompatActivity implements MoviesListC
 
         moviesListPresenter = new MoviesListPresenter(this, this, Schedulers.io(), AndroidSchedulers.mainThread());
 
-        if(savedInstanceState != null && savedInstanceState.getParcelableArrayList(Movie.BUNDLE_LIST) != null){
-            movieList = savedInstanceState.getParcelableArrayList(Movie.BUNDLE_LIST);
+        if(args == null || args.getParcelableArrayList(Movie.BUNDLE_LIST) == null) {
+            if (savedInstanceState != null && savedInstanceState.getParcelableArrayList(Movie.BUNDLE_LIST) != null) {
+                movieList = savedInstanceState.getParcelableArrayList(Movie.BUNDLE_LIST);
+                adapter = new MoviesListAdapter(movieList);
+                adapter.setMovieClickListener(this);
+                recyclerMovies.setAdapter(adapter);
+            } else {
+                if (NetworkUtils.isNetworkAvailable(this)) {
+                    moviesListPresenter.getGenres(false);
+                } else {
+                    SnackUtils.showSnackBarWithActionListener(this, coordinatorLayout, "OK", getString(R.string.no_network), this);
+                }
+            }
+        }
+        else{
+            movieList = args.getParcelableArrayList(Movie.BUNDLE_LIST);
             adapter = new MoviesListAdapter(movieList);
             adapter.setMovieClickListener(this);
             recyclerMovies.setAdapter(adapter);
-        }
-        else{
-            if(NetworkUtils.isNetworkAvailable(this)) {
-                moviesListPresenter.getGenres(false);
-            }
-            else{
-                SnackUtils.showSnackBarWithActionListener(this, coordinatorLayout, "OK", getString(R.string.no_network),this);
-            }
+
         }
 
         endlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {

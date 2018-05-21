@@ -31,7 +31,7 @@ public class Mock {
 
         ArrayList<Genre> genres = new ArrayList<>();
         genres.add(new Genre(1, "Action"));
-        genres.add(new Genre(2, "Adventure"));
+        genres.add(new Genre(12, "Adventure"));
         genres.add(new Genre(10, "Romance"));
 
         return genres;
@@ -42,19 +42,20 @@ public class Mock {
 
         ArrayList<Genre> genres = new ArrayList<>();
         genres.add(new Genre(1, "Action"));
-        genres.add(new Genre(2, "Adventure"));
+        genres.add(new Genre(12, "Adventure"));
         genres.add(new Genre(4, "Crime"));
 
         return genres;
 
     }
 
-    public static List<Movie> getMockMovies(){
+    public static ArrayList<Movie> getMockMovies(){
 
-        return Arrays.asList(
-                new Movie(370567, "Gnomeu e Julieta: O Mistério do Jardim", getGenresMovie1(), false, "2018-05-31", 5.3),
-                new Movie(370567, "Desejo de Matar", getGenresMovie2(), false, "2018-05-31", 5)
-        );
+        ArrayList<Movie> movies = new ArrayList<>();
+        movies.add(new Movie(370567, "Gnomeu e Julieta: O Mistério do Jardim", getGenresMovie1(), true, "2018-05-31", 5.3));
+        movies.add(new Movie(370567, "Desejo de Matar", getGenresMovie2(), false, "2018-05-31", 5));
+
+        return movies;
 
     }
 

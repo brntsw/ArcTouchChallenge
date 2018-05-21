@@ -92,13 +92,19 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieDeta
 
         movieDetailsPresenter = InjectionMovieDetailsPresenter.inject(this, this, Schedulers.io(), AndroidSchedulers.mainThread());
 
-        if(savedInstanceState != null && savedInstanceState.getParcelable(Movie.BUNDLE) != null){
-            movie = savedInstanceState.getParcelable(Movie.BUNDLE);
+        if(args != null && args.getParcelable(Movie.BUNDLE) == null) {
+            if (savedInstanceState != null && savedInstanceState.getParcelable(Movie.BUNDLE) != null) {
+                movie = savedInstanceState.getParcelable(Movie.BUNDLE);
+
+                loadData();
+            } else {
+                loadServerData();
+            }
+        }
+        else if(args != null){
+            movie = args.getParcelable(Movie.BUNDLE);
 
             loadData();
-        }
-        else {
-            loadServerData();
         }
     }
 
