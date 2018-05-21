@@ -1,4 +1,15 @@
 <resources>
     <string name="app_name">Code Challenge</string>
-    <string name="movie_and_genres">%s - %s</string>
+    <string translatable="false" name="movie_and_genres">%s - %s</string>
+    <string name="genres_placeholder">Genres: %s</string>
+    <string name="release_date">Release: %s</string>
+    <string name="overview">Overview</string>
+    <string name="no_more_movies">No more movies to load</string>
+    <string name="search_movie_name">Type some movie name here&#8230;</string>
+    <string name="search">Search</string>
+
+    <!-- Error messages -->
+    <string name="no_network">No network connection, try again later</string>
+    <string name="timeout_error">Oops, the connection seems to be slow at the moment, try again later</string>
+    <string name="general_error">An error has occurred on the server, try again later</string>
 </resources>

@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Code Challenge</string>
+    <string translatable="false" name="movie_and_genres">%s - %s</string>
+    <string name="genres_placeholder">Gêneros: %s</string>
+    <string name="release_date">Lançamento: %s</string>
+    <string name="overview">Visão geral</string>
+    <string name="no_more_movies">Não há mais filmes para mostrar</string>
+    <string name="search_movie_name">Digite o nome de algum filme&#8230;</string>
+    <string name="search">Pesquisar</string>
+
+    <!-- Error messages -->
+    <string name="no_network">Não há conexão, tente novamente mais tarde</string>
+    <string name="timeout_error">Oops, a conexão parece estar lenta no momento, tente novamente mais tarde</string>
+    <string name="general_error">Ocorreu um erro no servidor, tente novamente mais tarde</string>
+</resources>

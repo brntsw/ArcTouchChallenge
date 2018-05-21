@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinator_details"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".movie_details.MovieDetailsActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary">
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:expandedTitleTextAppearance="@style/Theme.Toolbar.Title">
+            <ImageView
+                android:id="@+id/img_context"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_image_placeholder"
+                app:layout_collapseMode="parallax" />
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:theme="@style/ToolBarStyle"
+                app:titleTextAppearance="@style/Theme.Toolbar.Title"/>
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="20dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="15dp">
+
+                <ImageView
+                    android:id="@+id/img_poster"
+                    android:layout_width="160dp"
+                    android:layout_height="240dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/tv_movie_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/movie_title"
+                        android:textColor="@android:color/white"
+                        android:textStyle="bold"
+                        tools:text="Gnomeu e Julieta: O mistério do Jardim"/>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="5dp">
+
+                        <TextView
+                            android:id="@+id/tv_vote_average"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="5dp"
+                            android:paddingEnd="5dp"
+                            android:textSize="@dimen/vote_size"
+                            android:textColor="@android:color/white"
+                            android:textStyle="bold"
+                            android:drawableStart="@drawable/star"
+                            android:drawablePadding="5dp"
+                            tools:text="6.2" />
+
+                        <ImageView
+                            android:id="@+id/img_adult"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/under_18"
+                            android:visibility="gone"
+                            android:layout_alignParentEnd="true"/>
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/tv_genres"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:text="@string/genres_placeholder"
+                        android:textSize="@dimen/details_text_size"
+                        android:textColor="@android:color/white"
+                        tools:text="Genres: Ação, Aventura, Comeédia, Drama"/>
+
+                    <TextView
+                        android:id="@+id/tv_release_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:textSize="@dimen/details_text_size"
+                        android:textColor="@android:color/white"
+                        tools:text="Release: 01/23/2019"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:text="@string/overview"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/tv_overview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:textSize="14sp"
+                android:textColor="@android:color/white"
+                tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam pretium nunc lacus, eget ultrices justo suscipit sed. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi non mauris sit amet nulla tristique maximus quis nec leo. Vestibulum ac facilisis neque. In eu fringilla ipsum. Donec et posuere velit. Vivamus pretium posuere arcu, ac lobortis sapien placerat eget. Aliquam dapibus hendrerit quam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed sit amet nibh sit amet velit euismod rutrum quis nec velit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec ac ante ut ligula finibus vestibulum ut a sapien."/>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</android.support.design.widget.CoordinatorLayout>
