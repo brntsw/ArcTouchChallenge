@@ -4,6 +4,9 @@
     <string name="genres_placeholder">Genres: %s</string>
     <string name="release_date">Release: %s</string>
     <string name="overview">Overview</string>
+    <string name="no_more_movies">No more movies to load</string>
+    <string name="search_movie_name">Type some movie name here&#8230;</string>
+    <string name="search">Search</string>
 
     <!-- Error messages -->
     <string name="no_network">No network connection, try again later</string>

@@ -14,6 +14,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.converter.jackson.JacksonConverterFactory;
 import retrofit2.converter.moshi.MoshiConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -50,6 +51,14 @@ public interface TmdbApi {
             @Query("language") String language
     );
 
+    @GET("search/movie")
+    Observable<Response<UpcomingMoviesResponse>> movieByName(
+        @Query("api_key") String apiKey,
+        @Query("query") String query,
+        @Query("page") Long page,
+        @Query("language") String language
+    );
+
     class Builder {
         private static HttpLoggingInterceptor getLoggingInterceptor() {
             HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
@@ -77,7 +86,7 @@ public interface TmdbApi {
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(URL)
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                    .addConverterFactory(MoshiConverterFactory.create())
+                    .addConverterFactory(JacksonConverterFactory.create())
                     .client(client)
                     .build();
 

@@ -1,4 +1,4 @@
-package com.arctouch.codechallenge;
+package com.arctouch.codechallenge.presentation;
 
 import android.content.Context;
 
@@ -30,7 +30,7 @@ public class MoviesListPresenterTest {
 
     @Test
     public void callGetMoviesListTest(){
-        moviesListPresenter.getMovies(true);
+        moviesListPresenter.getMovies(1, true);
     }
 
     @Test

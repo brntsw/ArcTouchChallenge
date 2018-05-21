@@ -47,7 +47,7 @@ public class MoviesListPresenter extends BasePresenter<MoviesListContract.View> 
                 .observeOn(observer)
                 .subscribe(new Observer<Response<GenreResponse>>() {
                     @Override
-                    public void onSubscribe(Disposable d) { }
+                    public void onSubscribe(Disposable d) {}
 
                     @Override
                     public void onNext(Response<GenreResponse> genreResponseResponse) {
@@ -92,26 +92,32 @@ public class MoviesListPresenter extends BasePresenter<MoviesListContract.View> 
     }
 
     @Override
-    public void getMovies(boolean showProgress) {
+    public void getMovies(int page, boolean showProgress) {
 
         if(showProgress)
             view.showProgress();
 
         InjectionTmdbApi.inject()
-                .upcomingMovies(TmdbApi.API_KEY, TmdbApi.DEFAULT_LANGUAGE, 1L, TmdbApi.DEFAULT_REGION)
+                .upcomingMovies(TmdbApi.API_KEY, TmdbApi.DEFAULT_LANGUAGE, Long.parseLong(String.valueOf(page)), TmdbApi.DEFAULT_REGION)
                 .subscribeOn(scheduler)
                 .observeOn(observer)
                 .subscribe(new Observer<Response<UpcomingMoviesResponse>>() {
                     @Override
-                    public void onSubscribe(Disposable d) { }
+                    public void onSubscribe(Disposable d) {}
 
                     @Override
                     public void onNext(Response<UpcomingMoviesResponse> upcomingMoviesResponseResponse) {
                         view.hideProgress();
 
                         if(upcomingMoviesResponseResponse.isSuccessful()){
-                            if(upcomingMoviesResponseResponse.body() != null)
-                                view.onSuccessMovies(upcomingMoviesResponseResponse.body().results);
+                            if(upcomingMoviesResponseResponse.body() != null) {
+                                if(page == 1) {
+                                    view.onSuccessMovies(upcomingMoviesResponseResponse.body().results);
+                                }
+                                else{
+                                    view.showMoreMovies(upcomingMoviesResponseResponse.body().results);
+                                }
+                            }
                         }
                         else{
                             if(upcomingMoviesResponseResponse.errorBody() != null){
@@ -144,6 +150,68 @@ public class MoviesListPresenter extends BasePresenter<MoviesListContract.View> 
                     @Override
                     public void onComplete() { }
                 });
+    }
+
+    public void getMoviesByName(int page, String name){
+
+        view.showProgress();
+
+        InjectionTmdbApi.inject()
+                .movieByName(TmdbApi.API_KEY, name, Long.parseLong(String.valueOf(page)), TmdbApi.DEFAULT_LANGUAGE)
+                .subscribeOn(scheduler)
+                .observeOn(observer)
+                .subscribe(new Observer<Response<UpcomingMoviesResponse>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Response<UpcomingMoviesResponse> movieResponse) {
+                        view.hideProgress();
+
+                        if(movieResponse.isSuccessful()){
+                            if(movieResponse.body() != null) {
+                                if(page == 1) {
+                                    view.onSuccessMovies(movieResponse.body().results);
+                                }
+                                else{
+                                    view.showMoreMovies(movieResponse.body().results);
+                                }
+                            }
+                        }
+                        else{
+                            if(movieResponse.errorBody() != null){
+                                try {
+                                    Log.d("Error", Objects.requireNonNull(movieResponse.errorBody()).string());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            else{
+                                view.onError(context.getString(R.string.general_error));
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        view.hideProgress();
+
+                        if(e != null)
+                            Log.e("onError", e.getMessage());
+
+                        if (e instanceof SocketTimeoutException) {
+                            view.onError(context.getString(R.string.timeout_error));
+                        } else {
+                            view.onError(context.getString(R.string.general_error));
+                        }
+                    }
+
+                    @Override
+                    public void onComplete() { }
+                });
+
     }
 
     public void addGenresToMovies(List<Movie> movies){

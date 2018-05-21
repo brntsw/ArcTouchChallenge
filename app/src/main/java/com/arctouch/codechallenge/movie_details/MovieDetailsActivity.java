@@ -17,11 +17,14 @@ import com.arctouch.codechallenge.R;
 import com.arctouch.codechallenge.di.InjectionMovieDetailsPresenter;
 import com.arctouch.codechallenge.extensions.DateExtensionsKt;
 import com.arctouch.codechallenge.extensions.GlideExtensionsKt;
+import com.arctouch.codechallenge.listener.ISnackBarActionListener;
 import com.arctouch.codechallenge.model.Genre;
 import com.arctouch.codechallenge.model.Movie;
 import com.arctouch.codechallenge.movie_details.presentation.MovieDetailsContract;
 import com.arctouch.codechallenge.util.MovieImageUrlBuilder;
+import com.arctouch.codechallenge.util.NetworkUtils;
 import com.arctouch.codechallenge.util.ProgressDialogUtils;
+import com.arctouch.codechallenge.util.SnackUtils;
 
 import java.util.Locale;
 
@@ -30,7 +33,7 @@ import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class MovieDetailsActivity extends AppCompatActivity implements MovieDetailsContract.View {
+public class MovieDetailsActivity extends AppCompatActivity implements MovieDetailsContract.View, ISnackBarActionListener {
 
     @BindView(R.id.coordinator_details)
     CoordinatorLayout coordinatorLayout;
@@ -65,7 +68,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieDeta
     private ProgressDialog progress;
     private MovieDetailsContract.Presenter movieDetailsPresenter;
     private Bundle args;
-    private int movieId;
+    private Movie movie;
     private MovieImageUrlBuilder movieImageUrlBuilder;
 
     @Override
@@ -83,21 +86,40 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieDeta
             ab.setDisplayShowHomeEnabled(true);
         }
 
+        args = getIntent().getExtras();
+
         movieImageUrlBuilder = new MovieImageUrlBuilder();
 
         movieDetailsPresenter = InjectionMovieDetailsPresenter.inject(this, this, Schedulers.io(), AndroidSchedulers.mainThread());
 
-        args = getIntent().getExtras();
+        if(savedInstanceState != null && savedInstanceState.getParcelable(Movie.BUNDLE) != null){
+            movie = savedInstanceState.getParcelable(Movie.BUNDLE);
 
-        if(args != null){
-            movieId = args.getInt(Movie.BUNDLE_ID);
-
-            movieDetailsPresenter.getMovieDetails(Long.parseLong(String.valueOf(movieId)));
+            loadData();
+        }
+        else {
+            loadServerData();
         }
     }
 
-    @Override
-    public void onSuccessMovieDetails(Movie movie) {
+    public void onSaveInstanceState(Bundle savedInstanceState){
+        savedInstanceState.putParcelable(Movie.BUNDLE, movie);
+
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    private void loadServerData(){
+        if (args != null) {
+            if(NetworkUtils.isNetworkAvailable(this)) {
+                movieDetailsPresenter.getMovieDetails(Long.parseLong(String.valueOf(args.getInt(Movie.BUNDLE_ID))));
+            }
+            else{
+                SnackUtils.showSnackBarWithActionListener(this, coordinatorLayout, "OK", getString(R.string.no_network),this);
+            }
+        }
+    }
+
+    private void loadData(){
         if(movie != null) {
             GlideExtensionsKt.loadUrl(imgContext, movieImageUrlBuilder.buildBackdropUrl(movie.backdropPath));
             GlideExtensionsKt.loadUrl(imgPoster, movieImageUrlBuilder.buildPosterUrl(movie.posterPath), true);
@@ -109,10 +131,17 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieDeta
             }
 
             tvVoteAverage.setText(String.valueOf(movie.voteAverage));
-            tvGenres.setText(TextUtils.join(", ", movie.genres));
+            tvGenres.setText(getString(R.string.genres_placeholder, TextUtils.join(", ", movie.genres)));
             tvReleaseDate.setText(getString(R.string.release_date, DateExtensionsKt.convertToFormattedDate(movie.releaseDate)));
             tvOverview.setText(movie.overview);
         }
+    }
+
+    @Override
+    public void onSuccessMovieDetails(Movie movie) {
+        this.movie = movie;
+
+        loadData();
     }
 
     @Override
@@ -137,5 +166,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieDeta
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+    }
+
+    @Override
+    public void onSnackBarClicked() {
+        loadServerData();
     }
 }

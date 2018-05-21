@@ -1,28 +1,89 @@
 package com.arctouch.codechallenge.model;
 
-import com.squareup.moshi.Json;
+import android.os.Parcel;
+import android.os.Parcelable;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.ArrayList;
 import java.util.List;
 
-public class Movie {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Movie implements Parcelable {
     public static final String BUNDLE_ID = "movie_id";
+    public static final String BUNDLE = "movie";
+    public static final String BUNDLE_LIST = "movies_list";
 
     public int id;
     public String title;
     public String overview;
-    public List<Genre> genres;
-    @Json(name = "genre_ids")
+    public ArrayList<Genre> genres;
+    @JsonProperty("genre_ids")
     public List<Integer> genreIds;
-    @Json(name = "poster_path")
+    @JsonProperty("poster_path")
     public String posterPath;
-    @Json(name = "backdrop_path")
+    @JsonProperty("backdrop_path")
     public String backdropPath;
-    @Json(name = "adult")
+    @JsonProperty("adult")
     public boolean adult;
-    @Json(name = "release_date")
+    @JsonProperty("release_date")
     public String releaseDate;
-    @Json(name = "vote_average")
+    @JsonProperty("vote_average")
     public double voteAverage;
+
+    public Movie(){}
+
+    public Movie(int id, String title, ArrayList<Genre> genres, boolean adult, String releaseDate, double voteAverage){
+        this.id = id;
+        this.title = title;
+        this.genres = genres;
+        this.adult = adult;
+        this.releaseDate = releaseDate;
+        this.voteAverage = voteAverage;
+    }
+
+    protected Movie(Parcel in) {
+        id = in.readInt();
+        title = in.readString();
+        overview = in.readString();
+        genres = in.createTypedArrayList(Genre.CREATOR);
+        posterPath = in.readString();
+        backdropPath = in.readString();
+        adult = in.readByte() != 0;
+        releaseDate = in.readString();
+        voteAverage = in.readDouble();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(title);
+        dest.writeString(overview);
+        dest.writeTypedList(genres);
+        dest.writeString(posterPath);
+        dest.writeString(backdropPath);
+        dest.writeByte((byte) (adult ? 1 : 0));
+        dest.writeString(releaseDate);
+        dest.writeDouble(voteAverage);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
 
     @Override
     public boolean equals(Object o) {

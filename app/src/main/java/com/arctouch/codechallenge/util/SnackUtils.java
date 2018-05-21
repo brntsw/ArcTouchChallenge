@@ -12,15 +12,18 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import com.arctouch.codechallenge.R;
+import com.arctouch.codechallenge.listener.ISnackBarActionListener;
 
 public class SnackUtils {
 
-    public static void showSnackbarWithAction(Context context, CoordinatorLayout coordinatorLayout, String action, String msg) {
+    public static void showSnackBarWithActionListener(Context context, CoordinatorLayout coordinatorLayout, String action, String msg, ISnackBarActionListener listener){
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(coordinatorLayout.getWindowToken(), 0);
+        if(imm != null)
+            imm.hideSoftInputFromWindow(coordinatorLayout.getWindowToken(), 0);
 
         Snackbar snackbar = Snackbar.make(coordinatorLayout, msg, Snackbar.LENGTH_INDEFINITE)
                 .setAction(action, v -> {
+                    listener.onSnackBarClicked();
                 });
         snackbar.setActionTextColor(Color.WHITE);
         View snackBarView = snackbar.getView();

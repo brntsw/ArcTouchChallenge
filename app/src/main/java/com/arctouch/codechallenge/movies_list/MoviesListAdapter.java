@@ -61,8 +61,12 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Vi
 
         void bind(Movie movie) {
             titleTextView.setText(movie.title);
-            genresTextView.setText(TextUtils.join(", ", movie.genres));
-            releaseDateTextView.setText(DateExtensionsKt.convertToFormattedDate(movie.releaseDate));
+
+            if(movie.genres != null)
+                genresTextView.setText(TextUtils.join(", ", movie.genres));
+
+            if(movie.releaseDate != null && !"".equals(movie.releaseDate))
+                releaseDateTextView.setText(DateExtensionsKt.convertToFormattedDate(movie.releaseDate));
 
             String posterPath = movie.posterPath;
             if (!TextUtils.isEmpty(posterPath)) {

@@ -1,16 +1,22 @@
 package com.arctouch.codechallenge.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.squareup.moshi.FromJson;
 import com.squareup.moshi.Json;
+import com.squareup.moshi.ToJson;
 
+import java.util.ArrayList;
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UpcomingMoviesResponse {
 
     public int page;
-    public List<Movie> results;
-    @Json(name = "total_pages")
+    public ArrayList<Movie> results;
+    @JsonProperty("total_pages")
     public int totalPages;
-    @Json(name = "total_results")
+    @JsonProperty("total_results")
     public int totalResults;
 
     @Override

@@ -1,4 +1,4 @@
-package com.arctouch.codechallenge;
+package com.arctouch.codechallenge.presentation;
 
 import android.content.Context;
 

@@ -40,13 +40,22 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-scalars:$scalars_version"
     implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-jackson:$retrofit_version"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
     implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
     implementation "com.github.bumptech.glide:glide:$glide_version"
 
+    //Jackson
+    implementation "com.fasterxml.jackson.core:jackson-core:$jackson_version"
+    implementation "com.fasterxml.jackson.core:jackson-annotations:$jackson_version"
+    implementation "com.fasterxml.jackson.core:jackson-databind:$jackson_version"
+
     //Butterknife
     implementation "com.jakewharton:butterknife:$butterknife_version"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknife_version"
+
+    //MaterialSearchView
+    implementation "com.miguelcatalan:materialsearchview:$materialsearch_version"
 
     //Testing
     testImplementation "junit:junit:$junit_version"
